@@ -1,6 +1,10 @@
 #ifndef MINI_GUI_H
 #define MINI_GUI_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 // Dummy declaration.
 struct mini_gui;
 
@@ -101,5 +105,10 @@ void mini_gui_log(struct mini_gui* mg, const char* fmt, ...);
  * @note Will not sleep in case the 'skip drawing' attribute was set
  */
 void mini_gui_sleep(struct mini_gui* mg, int milliseconds);
+
+#ifdef __cplusplus
+}
+#endif
+
 
 #endif
