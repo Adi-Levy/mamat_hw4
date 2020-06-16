@@ -121,8 +121,10 @@ void DrawableList::erase(Iterator& it) {
 		head = head->next;
 	else if (it.ptr == tail)
 		tail = tail->prev;
-	else 
+	else {
 		it.ptr->prev->next = it.ptr->next;
+		it.ptr->next->prev = it.ptr->prev;
+	}
 	size--;
 }
 
