@@ -26,6 +26,8 @@ class Monster : public Drawable {
 	// The gfx of the monster
 	const char* gfx;
 
+	void delete_me(DrawableList& lst);
+
 public:
 
 	/**

@@ -11,6 +11,8 @@ typedef enum {
 	left, right, up, down
 } direction_t;
 
+typedef enum { apple, monster} Drawable_type_ID;
+
 /**
  * @brief An abstract class for drawing ASCII objects
  */

@@ -85,8 +85,8 @@ bool Iterator::valid() const {
 DrawableList member methods implementations
 */
 DrawableList::DrawableList() :
-	head(nullptr),
-	tail(nullptr),
+	head(new Node()),
+	tail(head),
 	size(0) {}
 
 DrawableList::~DrawableList() {

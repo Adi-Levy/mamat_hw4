@@ -1,4 +1,4 @@
-
+#pragma warning(disable : 4576)
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -52,8 +52,8 @@ struct world parse_input() {
 			}
 			output.steps = arg1;
 		} else if (!strcmp(str, "seed")) {
-			if (scanf("%d", &arg1) != 1);
-			output.seed = arg1;
+			if (scanf("%d", &arg1) != 1)
+				output.seed = arg1;
 		} else if (!strcmp(str, "size")) {
 			if (scanf("%d %d", &arg1, &arg2) != 2) {
 				fail("Invalid number of arguments", line_num);
