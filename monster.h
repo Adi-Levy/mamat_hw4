@@ -36,6 +36,11 @@ public:
 	Monster(unsigned short x, unsigned short y, int direction_hold);
 
 	/**
+	 * @brief Initiate a monster from another monster
+	 */
+	Monster(const Monster& other);
+
+	/**
 	 * @brief Move the object in the direction
 	 */
 	virtual void move(direction_t direction);

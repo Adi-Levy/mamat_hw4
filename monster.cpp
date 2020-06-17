@@ -9,6 +9,11 @@ Monster::Monster(unsigned short x, unsigned short y, int direction_hold) :
 	current_direction(left), direction_hold(direction_hold), direction_counter(0), 
 	next_bb{ x, y, 1, 1 } , gfx(MONSTER0) { }
 
+Monster::Monster(const Monster& other) :
+	Drawable::Drawable(other.bounding_box), level(other.level), vel(other.vel),
+	current_direction(other.current_direction), direction_hold(other.direction_hold), 
+	direction_counter(other.direction_counter), next_bb(other.next_bb), gfx(other.gfx) { }
+
 void Monster::move(direction_t direction) {
 	// Get world size
 	struct rect world_size = mini_gui_get_screen_size(mg);
@@ -94,14 +99,16 @@ void Monster::step(DrawableList& lst) {
 			}
 			else {
 				if (this != it.get_object()) {
-					int other_lvl = dynamic_cast<Monster*>(it.get_object())->level;
-					if (other_lvl > 0) {
-						if (level > other_lvl) {
-							level += other_lvl;
+					Monster* other = dynamic_cast<Monster*>(it.get_object());
+					if (other->level > 0) {
+						if (level > other->level) {
+							level += other->level;
 							lst.erase(it);
 						}
 						else {
-							dynamic_cast<Monster*>(it.get_object())->level += level;
+							other->level += level;
+							other->refresh();
+							other->bounding_box = other->next_bb;
 							delete_me(lst);
 							return;
 						}
