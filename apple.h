@@ -5,6 +5,8 @@
 #include "drawable.h"
 
 class Apple : public Drawable {
+private:
+	bool draw_flag;
 public:
 
 	/**
