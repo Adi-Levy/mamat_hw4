@@ -42,7 +42,8 @@ void Monster::move(direction_t direction) {
 	default:
 		break;
 	}
-	direction_counter--;
+	if(direction_counter != 0)
+		direction_counter--;
 }
 
 void Monster::draw() {
