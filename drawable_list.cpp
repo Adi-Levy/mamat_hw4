@@ -43,8 +43,9 @@ Iterator& Iterator::set(const Iterator& other) {
 }
 
 Iterator& Iterator::next() {
+	Node* tmp = ptr->next;
 	this->decrease_counter();
-	ptr = ptr->next;
+	ptr = tmp;
 	if (ptr != nullptr) 
 		this->increase_counter();
 	while (ptr != nullptr && !this->valid()) {
@@ -84,10 +85,10 @@ bool Iterator::valid() const {
 /* 
 DrawableList member methods implementations
 */
-DrawableList::DrawableList() :
-	head(new Node()),
-	tail(head),
-	size(0) {}
+DrawableList::DrawableList() : size(0) {
+	head = nullptr;
+	tail = head;
+}
 
 DrawableList::~DrawableList() {
 	if (size != 0) {
@@ -99,19 +100,29 @@ DrawableList::~DrawableList() {
 
 void DrawableList::push_front(Drawable& item) {
 	Node* new_node = new Node();
-	new_node->next = head;
+	if (head != nullptr) {
+		new_node->next = head;
+		head->prev = new_node;
+	}
+	else
+		tail = new_node;
+	head = new_node;
 	new_node->item = &item;
 	new_node->valid = true;
-	head = new_node;
 	size++;
 }
 
 void DrawableList::push_back(Drawable& item) {
 	Node* new_node = new Node();
-	new_node->prev = tail;
+	if (tail != nullptr) {
+		new_node->prev = tail;
+		tail->next = new_node;
+	}
+	else 
+		head = new_node;
+	tail = new_node;
 	new_node->item = &item;
 	new_node->valid = true;
-	tail = new_node;
 	size++;
 }
 
@@ -133,9 +144,15 @@ int DrawableList::get_size() const {
 }
 
 Iterator DrawableList::begin() {
-	return Iterator(*head);
+	Iterator it = Iterator(*head);
+	if(!it.valid())
+		it.next();
+	return it;
 }
 
 Iterator DrawableList::end() {
-	return Iterator(*tail);
+	Iterator it = Iterator(*tail);
+	if (!it.valid())
+		it.prev();
+	return it;
 }
