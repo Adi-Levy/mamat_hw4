@@ -8,6 +8,7 @@ void Iterator::decrease_counter() {
 	if (ptr->iterator_counter == 0 && !ptr->valid) {
 		delete ptr->item;
 		delete ptr;
+		ptr = nullptr;
 	}
 }
 
@@ -130,8 +131,10 @@ void DrawableList::erase(Iterator& it) {
 	it.invalidate();
 	if (it.ptr == head)
 		head = head->next;
-	else if (it.ptr == tail)
+	else if (it.ptr == tail) {
 		tail = tail->prev;
+		tail->next = nullptr;
+	}
 	else {
 		it.ptr->prev->next = it.ptr->next;
 		it.ptr->next->prev = it.ptr->prev;

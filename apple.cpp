@@ -14,7 +14,7 @@ void Apple::draw() {
 }
 
 int Apple::id() {
-	return (int)apple;
+	return 0;
 }
 
 void Apple::refresh() { }

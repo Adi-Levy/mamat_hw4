@@ -24,7 +24,7 @@ void Monster::move(direction_t direction) {
 	switch (current_direction)
 	{
 	case up: 
-		if (bounding_box.y - vel >= 0) 
+		if (bounding_box.y - vel > 0) 
 			next_bb.y = bounding_box.y - vel;
 		break;
 	case down:
@@ -32,7 +32,7 @@ void Monster::move(direction_t direction) {
 			next_bb.y = bounding_box.y + vel;
 		break;
 	case left: 
-		if (bounding_box.x - vel >= 0)
+		if (bounding_box.x - vel > 0)
 			next_bb.x = bounding_box.x - vel;
 		break;
 	case right:
@@ -46,11 +46,13 @@ void Monster::move(direction_t direction) {
 }
 
 void Monster::draw() {
-	mini_gui_print_rect(mg, bounding_box, gfx);
+	mini_gui_clear_rect(mg, bounding_box);
+	mini_gui_print_rect(mg, next_bb, gfx);
+	bounding_box = next_bb;
 }
 
 int Monster::id() {
-	return (int)monster;
+	return 1;
 }
 
 void Monster::refresh() {
@@ -91,14 +93,13 @@ void Monster::refresh() {
 
 void Monster::step(DrawableList& lst) {
 	for (Iterator it = lst.begin(); it.valid(); it.next()) {
-		bounding_box = next_bb;
-		if (collide(*(it.get_object()))) {
-			if (it.get_object()->id() == apple) {
-				level += 1;
-				lst.erase(it);
-			}
-			else {
-				if (this != it.get_object()) {
+		if (this != it.get_object()) {
+			if (collide(*(it.get_object()))) {
+				if (it.get_object()->id() == 0) {
+					level += 1;
+					lst.erase(it);
+				}
+				else {
 					Monster* other = dynamic_cast<Monster*>(it.get_object());
 					if (other->level > 0) {
 						if (level > other->level) {
@@ -108,17 +109,16 @@ void Monster::step(DrawableList& lst) {
 						else {
 							other->level += level;
 							other->refresh();
-							other->bounding_box = other->next_bb;
 							delete_me(lst);
 							return;
 						}
 					}
 				}
+				refresh();
 			}
-			refresh();
 		}
 	}
-	bounding_box = next_bb;
+	refresh();
 }
 
 void Monster::delete_me(DrawableList& lst) {

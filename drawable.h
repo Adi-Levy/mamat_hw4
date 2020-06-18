@@ -11,8 +11,6 @@ typedef enum {
 	left, right, up, down
 } direction_t;
 
-typedef enum { apple, monster} Drawable_type_ID;
-
 /**
  * @brief An abstract class for drawing ASCII objects
  */
@@ -75,6 +73,7 @@ public:
 	 * @param lst A list of all drawable objects in the world
 	 */
 	virtual void step(DrawableList& lst) = 0;
+
 };
 
 #endif
