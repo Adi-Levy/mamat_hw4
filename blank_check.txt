@@ -1,0 +1,4 @@
+log outblanck.txt
+seed 3
+size 8 8
+steps 20
