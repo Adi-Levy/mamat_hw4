@@ -94,11 +94,9 @@ void Iterator::invalidate() { ptr->valid = false; }
  Return: TRUE if coordinets are equal, FLASE if not
  */
 Iterator& Iterator::set(const Iterator& other) {
-	if(ptr != nullptr)
-		this->decrease_counter();
+	this->decrease_counter();
 	ptr = other.ptr;
-	if (ptr != nullptr)
-		this->increase_counter();
+	this->increase_counter();
 	return *this;
 }
 
@@ -110,15 +108,19 @@ Iterator& Iterator::set(const Iterator& other) {
  Return: TRUE if coordinets are equal, FLASE if not
  */
 Iterator& Iterator::next() {
+	// tmp is for if we will be deleting this node in decrease_counter 
+	// we will still have the next node and not cut the list
 	Node* tmp = ptr->next;
 	this->decrease_counter();
 	ptr = tmp; 
 	this->increase_counter();
+	// find the next valid node
 	while (ptr != nullptr && !this->valid()) {
 		this->decrease_counter();
 		ptr = ptr->next;
 		this->increase_counter();
 	}
+	// if no more valid nodes return a nonvalid empty Node
 	if (!ptr) {
 		return this->set(Iterator(*(new Node())));
 	}
@@ -133,14 +135,18 @@ Iterator& Iterator::next() {
  Return: TRUE if coordinets are equal, FLASE if not
  */
 Iterator& Iterator::prev() {
+	// tmp is for if we will be deleting this node in decrease_counter 
+	// we will still have the next node and not cut the list
 	this->decrease_counter();
 	ptr = ptr->prev;
 	this->increase_counter();
+	// find the previous valid node
 	while (ptr != nullptr && !this->valid()) {
 		this->decrease_counter();
 		ptr = ptr->prev;
 		this->increase_counter();
 	}
+	// if no more valid nodes return a nonvalid empty Node
 	if (!ptr) {
 		return this->set(Iterator(*(new Node())));
 	}
@@ -198,6 +204,7 @@ DrawableList::~DrawableList() {
  */
 void DrawableList::push_front(Drawable& item) {
 	Node* new_node = new Node();
+	// check if list is empty
 	if (head != nullptr) {
 		new_node->next = head;
 		head->prev = new_node;
@@ -219,6 +226,7 @@ void DrawableList::push_front(Drawable& item) {
  */
 void DrawableList::push_back(Drawable& item) {
 	Node* new_node = new Node();
+	// check if list is empty
 	if (tail != nullptr) {
 		new_node->prev = tail;
 		tail->next = new_node;
@@ -246,6 +254,7 @@ void DrawableList::erase(Iterator& it) {
 		tail = tail->prev;
 		tail->next = nullptr;
 	}
+	// reconnect list over the erased node
 	else {
 		it.ptr->prev->next = it.ptr->next;
 		it.ptr->next->prev = it.ptr->prev;

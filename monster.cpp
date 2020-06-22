@@ -38,6 +38,7 @@ void Monster::move(direction_t direction) {
 	// Get world size
 	struct rect world_size = mini_gui_get_screen_size(mg);
 	if (direction_counter == 0) {
+		//change direction and reset hold counter
 		current_direction = direction;
 		direction_counter = direction_hold;
 	}
@@ -62,6 +63,7 @@ void Monster::move(direction_t direction) {
 	default:
 		break;
 	}
+	//safeguards from direction hold of 0
 	if(direction_counter != 0)
 		direction_counter--;
 }
@@ -135,12 +137,15 @@ void Monster::refresh() {
  */
 void Monster::step(DrawableList& lst) {
 	for (Iterator it = lst.begin(); it.valid(); it.next()) {
+		// self check
 		if (this != it.get_object()) {
 			if (collide(*(it.get_object()))) {
+				// check if objects colideed with is an apple
 				if (it.get_object()->id() == 0) {
 					level += 1;
 					lst.erase(it);
 				}
+				// if colided and not with apple then it colided with monster
 				else {
 					Monster* other = dynamic_cast<Monster*>(it.get_object());
 					if (other->level > 0) {
@@ -151,15 +156,17 @@ void Monster::step(DrawableList& lst) {
 						else {
 							other->level += level;
 							other->refresh();
+							// other monster won so delete me and exit this function
 							delete_me(lst);
 							return;
 						}
 					}
 				}
-				refresh();
 			}
 		}
 	}
+	// after going through all objects on screen and checking collision and updating level
+	// update next_bb
 	refresh();
 }
 
