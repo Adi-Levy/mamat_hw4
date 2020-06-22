@@ -4,16 +4,19 @@
 Iterator member methods implementations
 */
 void Iterator::decrease_counter() {
-	ptr->iterator_counter--;
-	if (ptr->iterator_counter == 0 && !ptr->valid) {
-		delete ptr->item;
-		delete ptr;
-		ptr = nullptr;
+	if (ptr != nullptr) {
+		ptr->iterator_counter--;
+		if (ptr->iterator_counter == 0 && !ptr->valid) {
+			delete ptr->item;
+			delete ptr;
+			ptr = nullptr;
+		}
 	}
 }
 
 void Iterator::increase_counter() {
-	ptr->iterator_counter++;
+	if(ptr != nullptr)
+		ptr->iterator_counter++;
 }
 
 Iterator::Iterator(Node& n) : 
@@ -46,14 +49,12 @@ Iterator& Iterator::set(const Iterator& other) {
 Iterator& Iterator::next() {
 	Node* tmp = ptr->next;
 	this->decrease_counter();
-	ptr = tmp;
-	if (ptr != nullptr) 
-		this->increase_counter();
+	ptr = tmp; 
+	this->increase_counter();
 	while (ptr != nullptr && !this->valid()) {
 		this->decrease_counter();
 		ptr = ptr->next;
-		if (ptr != nullptr)
-			this->increase_counter();
+		this->increase_counter();
 	}
 	if (!ptr) {
 		return this->set(Iterator(*(new Node())));
@@ -148,8 +149,9 @@ int DrawableList::get_size() const {
 
 Iterator DrawableList::begin() {
 	Iterator it = Iterator(*head);
-	if(!it.valid())
-		it.next();
+	if(it.ptr != nullptr)
+		if(!it.valid())
+			it.next();
 	return it;
 }
 
