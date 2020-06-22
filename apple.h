@@ -6,6 +6,7 @@
 
 class Apple : public Drawable {
 private:
+	// flag signaling if should draw apple
 	bool draw_flag;
 public:
 

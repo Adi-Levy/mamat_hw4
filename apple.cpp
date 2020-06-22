@@ -1,4 +1,3 @@
-#pragma warning(disable : 4576)
 #include "apple.h"
 
 Apple::Apple(unsigned short x, unsigned short y) : 

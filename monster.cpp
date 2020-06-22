@@ -1,5 +1,3 @@
-#pragma warning(disable : 4576)
-
 #include "monster.h"
 #include "drawable_list.h"
 
