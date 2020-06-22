@@ -65,13 +65,11 @@ Iterator& Iterator::next() {
 Iterator& Iterator::prev() {
 	this->decrease_counter();
 	ptr = ptr->prev;
-	if (ptr != nullptr)
-		this->increase_counter();
+	this->increase_counter();
 	while (ptr != nullptr && !this->valid()) {
 		this->decrease_counter();
 		ptr = ptr->prev;
-		if (ptr != nullptr)
-			this->increase_counter();
+		this->increase_counter();
 	}
 	if (!ptr) {
 		return this->set(Iterator(*(new Node())));
@@ -157,7 +155,8 @@ Iterator DrawableList::begin() {
 
 Iterator DrawableList::end() {
 	Iterator it = Iterator(*tail);
-	if (!it.valid())
-		it.prev();
+	if (it.ptr != nullptr)
+		if (!it.valid())
+			it.prev();
 	return it;
 }
