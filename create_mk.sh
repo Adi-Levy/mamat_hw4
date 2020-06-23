@@ -19,7 +19,7 @@ cpp_files=(`find *.cpp`);
 touch "$DIR"/objects.mk;
  > "$DIR"/objects.mk;
 for file in ${cpp_files[*]}; do
-	echo `g++ -MM "$file" | cut -f2 -d/` >> "$DIR"/objects.mk;
+	echo `g++ -MM "$file"` >> "$DIR"/objects.mk;
 done
 cd $curr_dir;
 
