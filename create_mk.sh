@@ -13,15 +13,13 @@
 ##############################################################
 
 curr_dir="$PWD";
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 cd "$1";
 cpp_files=(`find *.cpp`);
-touch objects.mk;
- > objects.mk;
+touch "$DIR"/objects.mk;
+ > "$DIR"/objects.mk;
 for file in ${cpp_files[*]}; do
-	echo `g++ -MM "$file"` >> objects.mk;
+	echo `g++ -MM "$file" | cut -f2 -d/` >> "$DIR"/objects.mk;
 done
-if [[ "$1" != "$curr_dir" ]]; then
-	mv "objects.mk" "$curr_dir";
-fi
 cd $curr_dir;
 
